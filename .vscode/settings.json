@@ -6,6 +6,9 @@
   "editor.codeActionsOnSave": ["source.fixAll.eslint"],
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
   "typescript.tsdk": "node_modules/typescript/lib",
-  "window.zoomLevel": 0.8,
-  "editor.fontSize": 17
+  "window.zoomLevel": 1,
+  "editor.fontSize": 17,
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

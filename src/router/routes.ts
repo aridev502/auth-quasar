@@ -7,6 +7,7 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     redirect: 'auth'
   },
+
   {
     path: '/admin',
     component: () => import('layouts/MainLayout.vue'),

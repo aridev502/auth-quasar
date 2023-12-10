@@ -15,12 +15,12 @@
               icon="add"
               class="absolute"
               style="top: 0; right: 12px; transform: translateY(-50%)"
-              :to="{ name: 'register' }"
-              label="REGISTER"
+              :to="{ name: 'login' }"
+              label="LOGIN"
             />
 
             <div class="row no-wrap items-center">
-              <div class="col text-h6 ellipsis">LOGIN</div>
+              <div class="col text-h6 ellipsis">REGISTRO</div>
             </div>
           </q-card-section>
 
