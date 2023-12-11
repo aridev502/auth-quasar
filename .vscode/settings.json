@@ -9,6 +9,6 @@
   "window.zoomLevel": 1,
   "editor.fontSize": 17,
   "[vue]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "Vue.volar"
   }
 }

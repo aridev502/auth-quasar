@@ -15,16 +15,16 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig)
-const auth = getAuth(firebaseApp);
-const db = getFirestore(firebaseApp);
+const authFirebase = getAuth(firebaseApp);
+const dbFirebase = getFirestore(firebaseApp);
 const marcaTiempo = serverTimestamp;
 
 
 
 export {
 
-  db,
-  auth,
+  dbFirebase,
+  authFirebase,
   marcaTiempo
 
 }
