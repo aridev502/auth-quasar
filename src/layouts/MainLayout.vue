@@ -5,16 +5,16 @@
       <q-toolbar>
         <q-toolbar-title>
           <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
+            <img :src="user?.photoURL">
           </q-avatar>
-          CHAT FIREBASE
+          {{ user?.displayName }}
         </q-toolbar-title>
-        <q-btn color="negative" icon="menu" label="SALIR" />
+        <q-btn color="negative" @click="logout" icon="menu" label="SALIR" />
       </q-toolbar>
 
       <q-tabs align="left">
         <q-route-tab to="/" label="HOME" />
-        <q-route-tab to="/page2" label="Page Two" />
+        <q-route-tab :to="{ name: 'login' }" label="Login" />
         <q-route-tab to="/page3" label="Page Three" />
       </q-tabs>
     </q-header>
@@ -27,5 +27,10 @@
 </template>
 
 <script setup lang="ts">
+import useAuth from 'src/auth/composables/useAuth';
+import { authStore } from 'src/auth/store/authStore';
 
+
+const { logout } = useAuth();
+const { userAuth: user } = authStore();
 </script>

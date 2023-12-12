@@ -44,6 +44,11 @@
             <q-separator />
             <q-card-actions>
               <q-btn type="submit" color="positive"> LOGIN </q-btn>
+
+              <q-img
+                src="https://assets-global.website-files.com/5c2a9a234fdbba7439c48fa4/632cc665abbc286ce8f3e896_Screen%20Shot%202022-09-22%20at%204.11.09%20PM.jpg"
+                spinner-color="primary" spinner-size="82px" @click="loginPopup" />
+
             </q-card-actions>
           </form>
 
@@ -65,23 +70,20 @@ const data = reactive({
   email: '',
   password: '',
 });
-const { login } = useAuth();
+const { login, loginPopup } = useAuth();
 
 const check = () => {
   if (data.password === '' || data.email === '') {
-
     $q.notify({
       message: 'El Correo y Contrasena Son Requeridos',
       progress: true,
       position: 'top',
       color: 'negative'
     });
-
     return;
   }
   login(data);
 }
-
 
 
 </script>

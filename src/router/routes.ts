@@ -11,6 +11,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/admin',
     component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
     children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
   },
 
@@ -21,6 +22,8 @@ const routes: RouteRecordRaw[] = [
     component: () => import('pages/ErrorNotFound.vue'),
   },
 ];
+
+
 
 export default routes;
 

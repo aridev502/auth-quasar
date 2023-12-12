@@ -8,6 +8,9 @@ const routes_auth: RouteRecordRaw[] = [
     path: '/auth',
     component: () => import('../layout/AuthLayout.vue'),
     redirect: { name: 'login' },
+    meta: {
+      isAuthenticats: true
+    },
     children: [
       {
         path: 'login',
