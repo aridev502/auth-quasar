@@ -1,10 +1,12 @@
 
 import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import { Loading, Notify } from "quasar";
-import { authFirebase } from "src/boot/firebase";
+import { authFirebase, dbFirebase } from "src/boot/firebase";
 import { useRouter } from "vue-router";
 import { authStore } from "../store/authStore";
 import { storeToRefs } from "pinia";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { Auth } from "../interface/Auth.interface";
 
 
 interface AuthInt {
@@ -51,17 +53,15 @@ const useAuth = () => {
       tokenStore.value = refreshToken;
       userAuth.value = { email: email!, displayName: displayName!, photoURL: photoURL!, uid }
       isLogin.value = true;
+      setUser(true, userAuth.value);
       router.push('/admin');
       Loading.hide();
       Notify.create({
         type: 'positive',
         message: 'Login Exitoso'
       });
-
-
     } catch (error: any) {
       console.log({ code: error.code, msj: error.message, });
-
       Loading.hide()
       Notify.create({
         type: 'negative',
@@ -80,10 +80,9 @@ const useAuth = () => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const { email, displayName, photoURL, uid } = result.user;
         photoURL?.slice(1, 1);
-        console.log(photoURL);
-
         tokenStore.value = credential!.accessToken!;
-        userAuth.value = { email: email!, displayName: displayName!, photoURL: photoURL!, uid }
+        userAuth.value = { email: email!, displayName: displayName!, photoURL: photoURL!, uid };
+        setUser(true, userAuth.value);
         Loading.hide();
         Notify.create({
           type: 'positive',
@@ -99,20 +98,62 @@ const useAuth = () => {
       });
   }
 
+  const setUser = async (estado: boolean, user?: Auth) => {
+
+    setDoc(doc(dbFirebase, 'users', user!.uid),
+      {
+        displayName: user!.displayName,
+        photoURL: user!.photoURL,
+        email: user!.email,
+        estado: estado
+      }
+    )
+
+
+  }
+
 
   const logout = async () => {
     Loading.show();
-    await signOut(authFirebase);
-    tokenStore.value = '';
-    userAuth.value = { displayName: '', email: '', photoURL: '', uid: '' };
-    isLogin.value = false
-    router.push('/');
-    Loading.hide();
-    Notify.create({
-      type: 'info',
-      message: 'SESION CERRADA'
-    });
 
+    //Segmentos de ruta adicionales que se aplicarán en relación con el primer argumento.
+    // Obtiene una instancia de preferencia de documentos que se refiere al documento en la ruta absoluta especificada.
+
+    // @param Firestore: una referencia a la instancia de Root Firestore.
+
+    // @param ruta: una ruta separada por barras a un documento.
+
+    // @param pathsegments
+    // segmentos de ruta adicionales que se aplicarán en relación con el primer argumento.
+
+
+    try {
+      const userFirebase = doc(dbFirebase, "/users", userAuth.value!.uid);
+
+
+
+      //Establezca el campo "Capital" de la ciudad 'DC'
+      await updateDoc(userFirebase, {
+        estado: false
+      });
+
+
+      tokenStore.value = '';
+      userAuth.value = { displayName: '', email: '', photoURL: '', uid: '' };
+      isLogin.value = false;
+      await signOut(authFirebase);
+      router.push('/');
+      Loading.hide();
+      Notify.create({
+        type: 'info',
+        message: 'SESION CERRADA'
+      });
+    } catch (error) {
+      console.log(error);
+
+    }
+
+    Loading.hide();
 
   }
 
