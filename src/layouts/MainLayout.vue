@@ -12,11 +12,8 @@
         <q-btn color="negative" @click="logout" icon="menu" label="SALIR" />
       </q-toolbar>
 
-      <q-tabs align="left">
-        <q-route-tab to="/" label="HOME" />
-        <q-route-tab :to="{ name: 'login' }" label="Login" />
-        <q-route-tab to="/page3" label="Page Three" />
-      </q-tabs>
+      <ListUser />
+
     </q-header>
 
     <q-page-container>
@@ -29,6 +26,9 @@
 <script setup lang="ts">
 import useAuth from 'src/auth/composables/useAuth';
 import { authStore } from 'src/auth/store/authStore';
+import { defineAsyncComponent, defineComponent } from 'vue';
+
+const ListUser = defineAsyncComponent(() => import('src/shared/LsitUser.vue'))
 
 
 const { logout } = useAuth();

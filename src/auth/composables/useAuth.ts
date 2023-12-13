@@ -19,7 +19,7 @@ const useAuth = () => {
   const store = authStore();
 
   const { token: tokenStore, userAuth, isLogin } = storeToRefs(store);
-
+  const user = userAuth;
 
   const router = useRouter();
   const provider = new GoogleAuthProvider();
@@ -105,7 +105,8 @@ const useAuth = () => {
         displayName: user!.displayName,
         photoURL: user!.photoURL,
         email: user!.email,
-        estado: estado
+        estado: estado,
+        uid: user!.uid
       }
     )
 
@@ -115,34 +116,20 @@ const useAuth = () => {
 
   const logout = async () => {
     Loading.show();
-
-    //Segmentos de ruta adicionales que se aplicarán en relación con el primer argumento.
-    // Obtiene una instancia de preferencia de documentos que se refiere al documento en la ruta absoluta especificada.
-
-    // @param Firestore: una referencia a la instancia de Root Firestore.
-
-    // @param ruta: una ruta separada por barras a un documento.
-
-    // @param pathsegments
-    // segmentos de ruta adicionales que se aplicarán en relación con el primer argumento.
-
-
     try {
       const userFirebase = doc(dbFirebase, "/users", userAuth.value!.uid);
 
-
-
-      //Establezca el campo "Capital" de la ciudad 'DC'
       await updateDoc(userFirebase, {
         estado: false
       });
-
-
       tokenStore.value = '';
       userAuth.value = { displayName: '', email: '', photoURL: '', uid: '' };
       isLogin.value = false;
       await signOut(authFirebase);
-      router.push('/');
+      router.push({
+        name: 'login',
+        force: true
+      });
       Loading.hide();
       Notify.create({
         type: 'info',
@@ -150,11 +137,8 @@ const useAuth = () => {
       });
     } catch (error) {
       console.log(error);
-
     }
-
     Loading.hide();
-
   }
 
 
@@ -162,7 +146,8 @@ const useAuth = () => {
     register,
     login,
     loginPopup,
-    logout
+    logout,
+    user
   }
 
 }
